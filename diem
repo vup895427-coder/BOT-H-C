@@ -1,0 +1,41 @@
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+
+const fs = require("fs");
+
+module.exports = {
+data: new SlashCommandBuilder()
+.setName("diem")
+.setDescription("Xem điểm học tập"),
+
+async execute(interaction){
+
+let users = JSON.parse(
+fs.readFileSync("./data/users.json")
+);
+
+let id = interaction.user.id;
+
+let user = users[id] || {
+diem:0,
+cap:1
+};
+
+let embed = new EmbedBuilder()
+.setTitle("📊 Hồ sơ học tập")
+.addFields(
+{
+name:"⭐ Điểm",
+value:`${user.diem}`
+},
+{
+name:"🏆 Cấp độ",
+value:`Level ${user.cap}`
+}
+);
+
+await interaction.reply({
+embeds:[embed]
+});
+
+}
+};
